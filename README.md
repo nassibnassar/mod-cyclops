@@ -7,7 +7,7 @@ This software is distributed under the terms of the GNU Affero General Public Li
 
 ## Overview
 
-This is a [FOLIO](https://folio.org/) module providing access to CCD, the server of [the CCMS software](https://pkg.go.dev/github.com/indexdata/ccms) that powers CYCLOPS. It exists so that we can create a FOLIO-based UI for CYCLOPS. It presents a somewhat RESTful WSAPI, in contrast with the command-based API of the underlying software, largely so that FOLIO permissions can be applied to the various endpoints.
+This is a [FOLIO](https://folio.org/) module providing access to CCD, the server of [the CCMS software](https://pkg.go.dev/github.com/indexdata/ccms) that powers [CYCLOPS](https://www.indexdata.com/cyclops/). It exists so that we can create a FOLIO-based UI for CYCLOPS. It presents a somewhat RESTful WSAPI, in contrast with the command-based API of the underlying software, largely so that FOLIO permissions can be applied to the various endpoints.
 
 
 ## Building
