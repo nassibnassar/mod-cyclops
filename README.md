@@ -1,6 +1,6 @@
 # mod-cyclops
 
-Copyright (C) 2025 Index Data.
+Copyright (C) 2025-2026 Index Data.
 
 This software is distributed under the terms of the GNU Affero General Public License version 3. See the file "[LICENSE](LICENSE)" for more information.
 
@@ -59,7 +59,9 @@ curl -w '\n' -X POST -D - -H "Content-type: application/json" -d '{"srvcId": "mo
 curl -w '\n' -X POST -D - -H "Content-type: application/json" -d '{"id": "mod-cyclops-0.0.1"}' http://localhost:9130/_/proxy/tenants/diku/modules
 ```
 
-**Private note to self**: when SSHing from the development laptop to the desktop machine `widow` that hosts the FOLIO VM, use:
+### Private note to self
+
+When SSHing from the development laptop `winston` to the desktop machine `widow` that hosts the FOLIO VM, use:
 ```
 winston$ ssh -L 9130:localhost:9130 -L 3001:localhost:3000 -R 12370:localhost:12370 widow
 widow$ cd ~/metadb/folio-release; vagrant ssh
@@ -67,10 +69,15 @@ vagrant$ ssh -L 12370:localhost:12370 mike@widow
 ```
 And in another `vagrant ssh` window, `curl http://127.0.0.1:12370/admin/health` to check the double tunnel is working.
 
+In the first `ssh` invocation above, we are making widow's Okapi (port 9130) available on winston, and as a gratuitous bonus its Stripes bundle too (mapped from port 3000 to 3001 to avoid colliding with any locally running Stripes bundle). We are also making our local mod-cyclops (port 12370) available on widow.
+
+In the second `ssh` invocation, which happens inside the FOLIO VM running on widow, we make widow's mod-cyclops (port 12370, forwarded from winston) available within the VM, so Okapi can invoke it.
+
 
 ## See also
 
 * [CCMS command documentation](https://d1f3dtrg62pav.cloudfront.net/ccms/)
+
 
 
 ## Author
