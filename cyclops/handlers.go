@@ -117,11 +117,12 @@ type SetList struct {
 }
 
 func (server *ModCyclopsServer) handleShowSets(w http.ResponseWriter, req *http.Request, caption string) error {
-	resp, err := server.ccmsClient.Send("show sets")
+	resp, err := server.sendToCCMS(caption, "show sets;")
 	if err != nil {
 		return fmt.Errorf("could not fetch show-sets response: %w", err)
 	}
 
+	fmt.Printf("resp = %+v\n", resp)
 	sets := make([]string, len(resp.Data))
 	for i, val := range resp.Data {
 		sets[i] = val.Values[0]
@@ -146,7 +147,7 @@ func makeRetrieveCommand(req *http.Request) (string, error) {
 	if fields == "" {
 		return "", errors.New("no 'fields' parameter supplied")
 	}
-	b.WriteString("retrieve ")
+	b.WriteString("select ")
 	b.WriteString(fields)
 
 	setName := chi.URLParam(req, "setName")
@@ -197,6 +198,7 @@ func makeRetrieveCommand(req *http.Request) (string, error) {
 		b.WriteString(limit)
 	}
 
+	b.WriteString(";")
 	return b.String(), nil
 }
 
@@ -252,16 +254,12 @@ func (server *ModCyclopsServer) handleRetrieve(w http.ResponseWriter, req *http.
 	}
 	server.Log("command", command)
 
-	resp, err := server.ccmsClient.Send(command)
+	resp, err := server.sendToCCMS(caption+" "+chi.URLParam(req, "setName"), command)
 	if err != nil {
 		return fmt.Errorf("could not retrieve: %w", err)
 	}
-	if resp.Status == "error" {
-		return fmt.Errorf("retrieve failed: %s", resp.Message)
-	}
 
 	localrr := ccms2local(resp)
-
 	return respondWithJSON(w, localrr, caption)
 }
 
