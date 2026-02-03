@@ -55,7 +55,7 @@ is automatically generated from
 In order to use this module as part of a FOLIO system, the simplest approach is to run a FOLIO virtual machine and tunnel its Okapi port 9130 out to the host operating system. Once this has been done, the running mod-cyclops can be made available by posting the module descriptor to Okapi, then posting a deployment descriptor that points at the running process, and finally enabling the module for the `diku` tenant.
 ```
 curl -w '\n' -X POST -D - -H "Content-type: application/json" -d @target/ModuleDescriptor.json http://localhost:9130/_/proxy/modules
-curl -w '\n' -X POST -D - -H "Content-type: application/json" -d '{"srvcId": "mod-cyclops-0.0.1", "instId": "127.0.0.1-12370-v2", "url" : "http://127.0.0.1:12370"}' http://localhost:9130/_/discovery/modules
+curl -w '\n' -X POST -D - -H "Content-type: application/json" -d '{"srvcId": "mod-cyclops-0.0.1", "instId": "127.0.0.1-12370", "url" : "http://127.0.0.1:12370"}' http://localhost:9130/_/discovery/modules
 curl -w '\n' -X POST -D - -H "Content-type: application/json" -d '{"id": "mod-cyclops-0.0.1"}' http://localhost:9130/_/proxy/tenants/diku/modules
 ```
 
