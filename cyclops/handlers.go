@@ -182,7 +182,7 @@ func makeRetrieveCommand(req *http.Request) (string, error) {
 
 	sort := req.URL.Query().Get("sort")
 	if sort != "" {
-		b.WriteString(" sort ")
+		b.WriteString(" order by ")
 		b.WriteString(sort)
 	}
 
