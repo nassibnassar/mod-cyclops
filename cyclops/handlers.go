@@ -10,19 +10,20 @@ import "github.com/go-chi/chi/v5"
 import "github.com/indexdata/ccms"
 
 type TagList struct {
-	Tags []string `json:"tags"`
+	Tags []any `json:"tags"`
 	// No other elements yet, but use a structure for future expansion
 }
 
 func (server *ModCyclopsServer) handleShowTags(w http.ResponseWriter, req *http.Request, caption string) error {
-	resp, err := server.sendToCCMS(caption, "show tags")
+	resp, err := server.sendToCCMS(caption, "show tags;")
 	if err != nil {
 		return err
 	}
 
-	tags := make([]string, len(resp.Data))
-	for i, val := range resp.Data {
-		tags[i] = val.Values[0]
+	result := readResults(resp)[0]
+	tags := make([]any, 0)
+	for val := range result.Data() {
+		tags = append(tags, val.Values()[0])
 	}
 	tagList := TagList{Tags: tags}
 	return respondWithJSON(w, tagList, caption)
@@ -57,19 +58,20 @@ func (server *ModCyclopsServer) handleDefineTag(w http.ResponseWriter, req *http
 // -----------------------------------------------------------------------------
 
 type FilterList struct {
-	Filters []string `json:"filters"`
+	Filters []any `json:"filters"`
 	// No other elements yet, but use a structure for future expansion
 }
 
 func (server *ModCyclopsServer) handleShowFilters(w http.ResponseWriter, req *http.Request, caption string) error {
-	resp, err := server.sendToCCMS(caption, "show filters")
+	resp, err := server.sendToCCMS(caption, "show filters;")
 	if err != nil {
 		return err
 	}
 
-	filters := make([]string, len(resp.Data))
-	for i, val := range resp.Data {
-		filters[i] = val.Values[0]
+	result := readResults(resp)[0]
+	filters := make([]any, 0)
+	for val := range result.Data() {
+		filters = append(filters, val.Values()[0])
 	}
 	filterList := FilterList{Filters: filters}
 	return respondWithJSON(w, filterList, caption)
@@ -112,7 +114,7 @@ func (server *ModCyclopsServer) handleDefineFilter(w http.ResponseWriter, req *h
 // -----------------------------------------------------------------------------
 
 type SetList struct {
-	Sets []string `json:"sets"`
+	Sets []any `json:"sets"`
 	// No other elements yet, but use a structure for future expansion
 }
 
@@ -122,9 +124,10 @@ func (server *ModCyclopsServer) handleShowSets(w http.ResponseWriter, req *http.
 		return fmt.Errorf("could not fetch show-sets response: %w", err)
 	}
 
-	sets := make([]string, len(resp.Data))
-	for i, val := range resp.Data {
-		sets[i] = val.Values[0]
+	fmt.Printf("result = %+v\n", result)
+	sets := make([]any, 0)
+	for val := range result.Data() {
+		sets = append(sets, val.Values()[0])
 	}
 	setList := SetList{Sets: sets}
 	return respondWithJSON(w, setList, caption)
@@ -192,18 +195,17 @@ func makeRetrieveCommand(req *http.Request) (string, error) {
 	}
 
 	limit := req.URL.Query().Get("limit")
-	if limit != "" {
-		b.WriteString(" limit ")
-		b.WriteString(limit)
+	if limit == "" {
+		limit = "100"
 	}
+	b.WriteString(" limit ")
+	b.WriteString(limit)
 
 	b.WriteString(";")
 	return b.String(), nil
 }
 
-// It's annoying that we have to make these descriptions that are
-// parallel to those in the ccms package, but it seems the only way to
-// specify the JSON encoding.
+// Specify the JSON encoding.
 
 type FieldDescription struct {
 	Name string `json:"name"`
@@ -211,7 +213,7 @@ type FieldDescription struct {
 }
 
 type DataRow struct {
-	Values []string `json:"values"`
+	Values []any `json:"values"`
 	// No other elements yet, but use a structure for future expansion
 }
 
@@ -222,27 +224,27 @@ type RetrieveResponse struct {
 	Message string             `json:"message"`
 }
 
-// Translate from CCMS's structure into an identical one with JSON encoding instructions
-// It feels like there has to be a better way to do this
+// Translate from CCMS's API into structures with JSON encoding instructions
 func ccms2local(rr *ccms.Response) RetrieveResponse {
-	localFields := make([]FieldDescription, len(rr.Fields))
-	for i, val := range rr.Fields {
-		localFields[i].Name = val.Name
+	r := readResults(rr)[0]
+	localFields := make([]FieldDescription, len(r.Fields()))
+	for i, val := range r.Fields() {
+		localFields[i].Name = val.Name()
 	}
 
-	localData := make([]DataRow, len(rr.Data))
-	for i, val := range rr.Data {
-		localData[i] = DataRow{
-			Values: make([]string, len(val.Values)),
-		}
-		copy(localData[i].Values, val.Values)
+	localData := make([]DataRow, 0)
+	for val := range r.Data() {
+		values := val.Values()
+		row := DataRow{Values: make([]any, len(values))}
+		copy(row.Values, values)
+		localData = append(localData, row)
 	}
 
 	return RetrieveResponse{
-		Status:  rr.Status,
+		Status:  r.Status(),
 		Fields:  localFields,
 		Data:    localData,
-		Message: rr.Message,
+		Message: r.Message(),
 	}
 }
 
@@ -299,8 +301,9 @@ func (server *ModCyclopsServer) sendToCCMS(caption string, command string) (*ccm
 	if err != nil {
 		return nil, fmt.Errorf("could not %s: %w", caption, err)
 	}
-	if resp.Status == "error" {
-		return nil, fmt.Errorf("%s failed: %s", caption, resp.Message)
+	result := readResults(resp)[0]
+	if result.Status() == "error" {
+		return nil, fmt.Errorf("%s failed: %s", caption, result.Message())
 	}
 	return resp, nil
 }
@@ -316,4 +319,12 @@ func respondWithJSON(w http.ResponseWriter, data any, caption string) error {
 	// If w.write fails there is no way to report this to the client: see MODREP-37.
 	_, _ = w.Write(b)
 	return nil
+}
+
+func readResults(resp *ccms.Response) []ccms.Result {
+	results := make([]ccms.Result, 0)
+	for r := range resp.Results() {
+		results = append(results, r)
+	}
+	return results
 }
