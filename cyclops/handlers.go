@@ -135,7 +135,26 @@ func (server *ModCyclopsServer) handleShowSets(w http.ResponseWriter, req *http.
 
 // -----------------------------------------------------------------------------
 
+type CreateSet struct {
+	Name string `json:"name"`
+}
+
 func (server *ModCyclopsServer) handleCreateSet(w http.ResponseWriter, req *http.Request, caption string) error {
+	var set CreateSet
+	err := unmarshalBody(req, &set)
+	if err != nil {
+		return fmt.Errorf("%s: %w", caption, err)
+	}
+
+	command := "create set " + set.Name + ";"
+	server.Log("command", command)
+
+	resp, err := server.sendToCCMS(caption+" "+set.Name, command)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("%s response: %+v\n", caption, resp)
+
 	w.WriteHeader(http.StatusNoContent)
 	return nil
 }
