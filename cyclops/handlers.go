@@ -188,18 +188,18 @@ func makeRetrieveCommand(req *http.Request) (string, error) {
 		b.WriteString(sort)
 	}
 
-	offset := req.URL.Query().Get("offset")
-	if offset != "" {
-		b.WriteString(" offset ")
-		b.WriteString(offset)
-	}
-
 	limit := req.URL.Query().Get("limit")
 	if limit == "" {
 		limit = "100"
 	}
 	b.WriteString(" limit ")
 	b.WriteString(limit)
+
+	offset := req.URL.Query().Get("offset")
+	if offset != "" {
+		b.WriteString(" offset ")
+		b.WriteString(offset)
+	}
 
 	b.WriteString(";")
 	return b.String(), nil
