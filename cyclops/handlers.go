@@ -124,7 +124,7 @@ func (server *ModCyclopsServer) handleShowSets(w http.ResponseWriter, req *http.
 		return fmt.Errorf("could not fetch show-sets response: %w", err)
 	}
 
-	fmt.Printf("result = %+v\n", result)
+	result := readResults(resp)[0]
 	sets := make([]any, 0)
 	for val := range result.Data() {
 		sets = append(sets, val.Values()[0])
