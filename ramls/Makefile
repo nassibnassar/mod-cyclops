@@ -6,7 +6,8 @@
 # and follow the instructions in its "api-lint" and "api-doc" directories
 
 # This VENV setting is for Mike's laptop, and ought to be parameterized
-VENV=/Users/mike/git/folio/other/folio-tools/api-lint/.venv
+#VENV=/Users/mike/git/folio/other/folio-tools/api-lint/.venv
+VENV=/Users/mike/.local/share/virtualenvs/api-lint-dv5iwVpa
 
 lint: schemalint examplelint apilint docgen
 
