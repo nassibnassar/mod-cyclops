@@ -1,0 +1,42 @@
+run:
+  timeout: 5m
+  tests: true
+
+linters:
+  enable:
+    # Core replacements for your tools
+    - staticcheck     # replaces many checks (incl. deadcode-like issues)
+    - errcheck
+    - ineffassign
+    - govet           # includes shadow (when enabled below)
+
+    # Common modern additions (recommended)
+    - gosimple
+    - unused
+    - typecheck
+    - gofmt
+
+linters-settings:
+  govet:
+    enable:
+      - shadow
+
+  errcheck:
+    check-type-assertions: true
+    check-blank: false
+
+  staticcheck:
+    checks: ["all"]
+
+issues:
+  exclude-use-default: false
+
+# Optional: ignore some noisy patterns
+#  exclude-rules:
+#    - path: _test\.go
+#      linters:
+#        - errcheck
+
+output:
+  formats:
+    - format: colored-line-number
