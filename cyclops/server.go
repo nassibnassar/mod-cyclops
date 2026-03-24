@@ -47,12 +47,12 @@ func MakeModCyclopsServer(logger *catlogger.Logger, ccmsClient *ccms.Client, roo
 	fs := http.FileServer(http.Dir(root + "/htdocs"))
 	r.Get("/", func(w http.ResponseWriter, req *http.Request) {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		fmt.Fprintln(w, `<a href="/htdocs/">Static area</a>`)
+		_, _ = fmt.Fprintln(w, `<a href="/htdocs/">Static area</a>`)
 	})
 	r.Handle("/htdocs/*", http.StripPrefix("/htdocs/", fs))
 	r.Handle("/favicon.ico", fs)
 	r.Get("/admin/health", func(w http.ResponseWriter, req *http.Request) {
-		fmt.Fprintln(w, "Behold! I live!!")
+		_, _ = fmt.Fprintln(w, "Behold! I live!!")
 	})
 	r.Get("/cyclops/tags", func(w http.ResponseWriter, req *http.Request) {
 		server.runWithErrorHandling(w, req, server.handleShowTags, "show tags")
@@ -85,7 +85,7 @@ func MakeModCyclopsServer(logger *catlogger.Logger, ccmsClient *ccms.Client, roo
 		status := http.StatusNotFound
 		message := http.StatusText(status)
 		w.WriteHeader(status)
-		fmt.Fprintln(w, message)
+		_, _ = fmt.Fprintln(w, message)
 		server.Log("error", fmt.Sprintf("%s %s: %d %s", req.Method, req.RequestURI, status, message))
 	})
 
@@ -126,7 +126,7 @@ func (server *ModCyclopsServer) runWithErrorHandling(w http.ResponseWriter, req 
 			status = http.StatusInternalServerError
 		}
 		w.WriteHeader(status)
-		fmt.Fprintln(w, err.Error())
+		_, _ = fmt.Fprintln(w, err.Error())
 		message := http.StatusText(status)
 		server.Log("error", fmt.Sprintf("%s %s: %d %s: %s", req.Method, req.RequestURI, status, message, err.Error()))
 	}
