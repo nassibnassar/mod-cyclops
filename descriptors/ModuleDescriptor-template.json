@@ -71,6 +71,15 @@
         },
         {
           "methods": [
+            "DELETE"
+          ],
+          "pathPattern": "/cyclops/sets/{setName}",
+          "permissionsRequired": [
+            "cyclops.sets.delete"
+          ]
+        },
+        {
+          "methods": [
             "POST"
           ],
           "pathPattern": "/cyclops/sets/{setName}",
@@ -127,6 +136,10 @@
     {
       "permissionName": "cyclops.sets.retrieve",
       "displayName": "CYCLOPS: Retrieve objects from set"
+    },
+    {
+      "permissionName": "cyclops.sets.delete",
+      "displayName": "CYCLOPS: Delete set"
     },
     {
       "permissionName": "cyclops.sets.modify",

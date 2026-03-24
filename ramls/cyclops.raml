@@ -72,7 +72,7 @@ documentation:
     /{setName}:
       uriParameters:
         setName:
-          description: The name of the set to retrieve from, modify or tag
+          description: The name of the set to retrieve from, modify, delete or tag
           type: string
           required: true
       get:
@@ -126,6 +126,11 @@ documentation:
                 value: !include examples/addobject-example.json
               remove:
                 value: !include examples/removeobject-example.json
+        responses:
+          204:
+            description: No content is returned.
+      delete:
+        description: "Delete a set"
         responses:
           204:
             description: No content is returned.

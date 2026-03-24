@@ -285,6 +285,21 @@ func (server *ModCyclopsServer) handleRetrieve(w http.ResponseWriter, req *http.
 
 // -----------------------------------------------------------------------------
 
+func (server *ModCyclopsServer) handleDropSet(w http.ResponseWriter, req *http.Request, caption string) error {
+	command := "drop set " + chi.URLParam(req, "setName") + ";"
+	server.Log("command", command)
+
+	resp, err := server.sendToCCMS(caption+" "+chi.URLParam(req, "setName"), command)
+	if err != nil {
+		return err
+	}
+
+	localrr := ccms2local(resp)
+	return respondWithJSON(w, localrr, caption)
+}
+
+// -----------------------------------------------------------------------------
+
 func (server *ModCyclopsServer) handleAddRemoveObjects(w http.ResponseWriter, req *http.Request, caption string) error {
 	// It seems weird to just shrug and say "fine" for anything posted, but for now it will suffice.
 	w.WriteHeader(http.StatusNoContent)
