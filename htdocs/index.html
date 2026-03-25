@@ -46,6 +46,18 @@
     function deleteObject(path) {
       postOrDelete('DELETE', path);
     }
+
+    function addRecord() {
+      postData(
+	'/cyclops/sets/test.mike/add',
+	{
+	  from: 'reserve',
+	  cond: "author = 'Adams, John'",
+	  // filter: 'jurassic', // Not yet supported
+	  // tag: 'dino,ptero', // Not yet supported
+	}
+      )
+    }
   </script>
  </head>
  <body>
@@ -70,7 +82,7 @@
    <li><button class="link-button" onclick="deleteObject('/cyclops/sets/test.mike')">delete set "test.mike"</button></li>
    <li><a href="/cyclops/sets/test.mike?fields=%2A&cond=143100000%20%3C%3D%20age%20AND%20age%20%3C%3D%20201400000&filter=jurassic&tag=dino,ptero&sort=author,title&offset=20&limit=10">retrieve from set "test.mike"</a></li>
    <li><a href="/cyclops/sets/test.mike?fields=%2A&cond=title='rings' or author='lewis'&sort=author&offset=20&limit=10">retrieve from set "test.mike" using only supported params</a></li>
-   <li><button class="link-button" onclick="postData('/cyclops/sets/test.mike/add', { from: 'allobjects', cond: 'date >= 2025-01-01', filter: 'jurassic', tag: 'dino,ptero' })">add objects to set "test.mike"</button></li>
+   <li><button class="link-button" onclick="addRecord()">add objects to set "test.mike"</button></li>
    <li><button class="link-button" onclick="postData('/cyclops/sets/test.mike/remove', { cond: 'date < 2025-01-01', filter: 'cretaceous', omitTag: 'ptero,croc' })">remove objects from set "test.mike"</button></li>
    <li><button class="link-button" onclick="postData('/cyclops/sets/test.mike/tag/dino', { op: 'add', cond: 'title LIKE %saur', filter: 'jurassic' })">add tag "dino" to records in set "test.mike"</button></li>
    <li><button class="link-button" onclick="postData('/cyclops/sets/test.mike/tag/dino', { op: 'remove', cond: 'author LIKE %taylor%', filter: 'cretaceous' })">remove tag "dino" from records in set "test.mike"</button></li>

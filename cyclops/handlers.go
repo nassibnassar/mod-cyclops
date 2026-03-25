@@ -305,8 +305,54 @@ func (server *ModCyclopsServer) handleDropSet(w http.ResponseWriter, req *http.R
 
 // -----------------------------------------------------------------------------
 
-func (server *ModCyclopsServer) handleAddRemoveObjects(w http.ResponseWriter, req *http.Request, caption string) error {
-	// It seems weird to just shrug and say "fine" for anything posted, but for now it will suffice.
+type AddRecords struct {
+	From    string `json:"from"`
+	Cond    string `json:"cond"`
+	Filter  string `json:"filter"`
+	Tag     string `json:"tag"`
+	OmitTag string `json:"omittag"`
+	Limit   string `json:"limit"`
+}
+
+func (server *ModCyclopsServer) handleAddObjects(w http.ResponseWriter, req *http.Request, caption string) error {
+	setName := chi.URLParam(req, "setName")
+
+	var params AddRecords
+	err := unmarshalBody(req, &params)
+	if err != nil {
+		return fmt.Errorf("%s: %w", caption, err)
+	}
+
+	clause, err := makeSelectClause(
+		"*",
+		params.From,
+		params.Cond,
+		params.Filter,
+		params.Tag,
+		params.OmitTag,
+		"", // Sort
+		params.Limit,
+		"", // Offset
+	)
+	if err != nil {
+		return fmt.Errorf("could not make select clause: %w", err)
+	}
+	command := "insert into " + setName + " " + clause
+	server.Log("command", command)
+
+	resp, err := server.sendToCCMS(caption+" "+setName, command)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("%s response: %+v\n", caption, resp)
+
+	w.WriteHeader(http.StatusNoContent)
+	return nil
+}
+
+// -----------------------------------------------------------------------------
+
+func (server *ModCyclopsServer) handleRemoveObjects(w http.ResponseWriter, req *http.Request, caption string) error {
 	w.WriteHeader(http.StatusNoContent)
 	return nil
 }

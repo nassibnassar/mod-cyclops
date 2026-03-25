@@ -78,8 +78,11 @@ func MakeModCyclopsServer(logger *catlogger.Logger, ccmsClient *ccms.Client, roo
 	r.Delete("/cyclops/sets/{setName}", func(w http.ResponseWriter, req *http.Request) {
 		server.runWithErrorHandling(w, req, server.handleDropSet, "drop set")
 	})
-	r.Post("/cyclops/sets/{setName}", func(w http.ResponseWriter, req *http.Request) {
-		server.runWithErrorHandling(w, req, server.handleAddRemoveObjects, "add/remove objects")
+	r.Post("/cyclops/sets/{setName}/add", func(w http.ResponseWriter, req *http.Request) {
+		server.runWithErrorHandling(w, req, server.handleAddObjects, "add objects")
+	})
+	r.Post("/cyclops/sets/{setName}/remove", func(w http.ResponseWriter, req *http.Request) {
+		server.runWithErrorHandling(w, req, server.handleRemoveObjects, "remove objects")
 	})
 	r.Post("/cyclops/sets/{setName}/tag/{tagName}", func(w http.ResponseWriter, req *http.Request) {
 		server.runWithErrorHandling(w, req, server.handleAddRemoveTags, "add/remove tags")
