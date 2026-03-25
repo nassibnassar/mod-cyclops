@@ -116,24 +116,31 @@ documentation:
               application/json:
                 type: !include retrieve-schema.json
                 example: !include examples/retrieve-example.json
-      post:
-        description: "add objects to, or remove objects from, a set"
-        body:
-          application/json:
-            type: !include addremoveobjects-schema.json
-            examples:
-              add:
-                value: !include examples/addobject-example.json
-              remove:
-                value: !include examples/removeobject-example.json
-        responses:
-          204:
-            description: No content is returned.
       delete:
         description: "Delete a set"
         responses:
           204:
             description: No content is returned.
+      /add:
+        post:
+          description: "add objects to a set"
+          body:
+            application/json:
+              type: !include addobjects-schema.json
+              example: !include examples/addobject-example.json
+          responses:
+            204:
+              description: No content is returned.
+      /remove:
+        post:
+          description: "remove objects from a set"
+          body:
+            application/json:
+              type: !include removeobjects-schema.json
+              example: !include examples/removeobject-example.json
+          responses:
+            204:
+              description: No content is returned.
       /tag:
         /{tagName}:
           uriParameters:

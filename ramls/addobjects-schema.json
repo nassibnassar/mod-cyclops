@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "A request to add objects to a set",
+  "type": "object",
+  "properties": {
+    "from": {
+      "type": "string",
+      "description": "Name of the set from which records are to be added to this one"
+    },
+    "cond": {
+      "type": "string",
+      "description": "An SQL-like WHERE condition specifying the selection of records to be added"
+    },
+    "filter": {
+      "type": "string",
+      "description": "The name of a filter to be applied to selection of records to be added"
+    },
+    "tag": {
+      "type": "string",
+      "description": "A comma-separated list of the names of tags, specifying that only those selected records with any of the tags will be added"
+    },
+    "omitTag": {
+      "type": "string",
+      "description": "A comma-separated list of the names of tags, specifying that only those selected records without any of the tags will be be added"
+    },
+    "limit": {
+      "type": "string",
+      "description": "A maximum number of objects that will be added to the set"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "from"
+  ]
+}

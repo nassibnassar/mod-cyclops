@@ -19,7 +19,8 @@ schemalint:
 	z-schema set-schema.json
 	z-schema sets-schema.json
 	z-schema retrieve-schema.json
-	z-schema addremoveobjects-schema.json
+	z-schema addobjects-schema.json
+	z-schema removeobjects-schema.json
 	z-schema addremovetag-schema.json
 
 examplelint:
@@ -30,8 +31,8 @@ examplelint:
 	z-schema set-schema.json examples/set-example.json
 	z-schema sets-schema.json examples/show-sets-example.json
 	z-schema retrieve-schema.json examples/retrieve-example.json
-	z-schema addremoveobjects-schema.json examples/addobject-example.json
-	z-schema addremoveobjects-schema.json examples/removeobject-example.json
+	z-schema addobjects-schema.json examples/addobject-example.json
+	z-schema removeobjects-schema.json examples/removeobject-example.json
 	z-schema addremovetag-schema.json examples/addtag-example.json
 	z-schema addremovetag-schema.json examples/removetag-example.json
 
