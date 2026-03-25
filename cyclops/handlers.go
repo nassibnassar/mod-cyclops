@@ -226,12 +226,11 @@ func makeSelectClause(fields, setName, cond, filter, tag, omitTag, sort, limit, 
 	b.WriteString(setName)
 
 	b.WriteString(conditionalClause)
-	b.WriteString(";")
 	return b.String(), nil
 }
 
 func makeRetrieveCommand(req *http.Request) (string, error) {
-	return makeSelectClause(
+	selectClause, err := makeSelectClause(
 		req.URL.Query().Get("fields"),
 		chi.URLParam(req, "setName"),
 		req.URL.Query().Get("cond"),
@@ -242,6 +241,10 @@ func makeRetrieveCommand(req *http.Request) (string, error) {
 		req.URL.Query().Get("limit"),
 		req.URL.Query().Get("offset"),
 	)
+	if err != nil {
+		return "", err
+	}
+	return selectClause + ";", nil
 }
 
 // Specify the JSON encoding.
@@ -352,7 +355,7 @@ func (server *ModCyclopsServer) handleAddObjects(w http.ResponseWriter, req *htt
 	if err != nil {
 		return fmt.Errorf("could not make select clause: %w", err)
 	}
-	command := "insert into " + setName + " " + clause
+	command := "insert into " + setName + " " + clause + ";"
 	server.Log("command", command)
 
 	resp, err := server.sendToCCMS(caption+" "+setName, command)
@@ -389,9 +392,9 @@ func (server *ModCyclopsServer) handleRemoveObjects(w http.ResponseWriter, req *
 		params.Filter,
 		params.Tag,
 		params.OmitTag,
-		"", // Sort
+		"",  // Sort
 		"*", // Special-case value to omit "limit" completely
-		"", // Offset
+		"",  // Offset
 	)
 	if err != nil {
 		return fmt.Errorf("could not make conditional clause: %w", err)
