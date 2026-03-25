@@ -15,50 +15,7 @@
       color: purple;
     }
   </style>
-  <script>
-    function postOrDelete(method, path, data) {
-      const params = { method };
-      if (method === 'POST') {
-	params.headers = {
-	  'Content-Type': 'application/json'
-	};
-	params.body = JSON.stringify(data);
-      }
-      fetch(path, params)
-      .then(async (response) => {
-	if (!response.ok) {
-	  const errorText = await response.text().catch(() => '');
-	  alert(`Request failed with status ${response.status}: ${errorText}`);
-	} else {
-	  const result = await response.json().catch(() => null);
-	  alert('Success:', result);
-	}
-      })
-      .catch((error) => {
-	alert(`POST to ${path} failed:`, error);
-      });
-    }
-
-    function postData(path, data) {
-      postOrDelete('POST', path, data);
-    }
-
-    function deleteObject(path) {
-      postOrDelete('DELETE', path);
-    }
-
-    function addRecord() {
-      postData(
-	'/cyclops/sets/test.mike/add',
-	{
-	  from: 'reserve',
-	  cond: "author = 'Adams, John'",
-	  // filter: 'jurassic', // Not yet supported
-	  // tag: 'dino,ptero', // Not yet supported
-	}
-      )
-    }
-  </script>
+  <script src="sendRequest.js" defer></script>
  </head>
  <body>
   This is
