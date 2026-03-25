@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <title>Interactive form for mod-cyclops</title>
+    <script src="sendRequest.js" defer></script>
+  </head>
+  <body>
+    <h1>Interactive form for mod-cyclops</h1>
+
+    <h2>Sets</h2>
+    <p><a href="/cyclops/sets">List sets</a></p>
+    <p>
+      <form id="create-set-form">
+	<label for="nameToAdd">Create set name:</label>
+	<input type="text" id="nameToAdd" value="test.mike" />
+	<button type="submit">Submit</button>
+      </form>
+      <script>
+	console.log('adding add-form listener');
+	document.getElementById('create-set-form').addEventListener('submit', function (e) {
+	  console.log('creating')
+	  e.preventDefault();
+	  postData('/cyclops/sets', { name: document.getElementById('nameToAdd').value });
+	});
+      </script>
+    </p>
+    <p>
+      <form id="delete-set-form">
+	<label for="nameToDelete">Delete set name:</label>
+	<input type="text" id="nameToDelete" value="test.mike" />
+	<button type="submit">Submit</button>
+      </form>
+      <script>
+	console.log('adding delete-form listener');
+	document.getElementById('delete-set-form').addEventListener('submit', function (e) {
+	  console.log('deleting')
+	  e.preventDefault();
+	  deleteObject('/cyclops/sets/' + document.getElementById('nameToDelete').value);
+	});
+      </script>
+    </p>
+  </body>
+</html>
