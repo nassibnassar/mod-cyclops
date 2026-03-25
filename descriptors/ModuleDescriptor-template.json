@@ -84,8 +84,8 @@
           ],
           "pathPattern": "/cyclops/sets/{setName}/add",
           "permissionsRequired": [
-            "cyclops.sets.add-objects",
-          ],
+            "cyclops.sets.add-objects"
+          ]
 	},
         {
           "methods": [
@@ -93,8 +93,8 @@
           ],
           "pathPattern": "/cyclops/sets/{setName}/remove",
           "permissionsRequired": [
-            "cyclops.sets.remove-objects",
-          ],
+            "cyclops.sets.remove-objects"
+          ]
 	},
         {
           "methods": [
@@ -148,11 +148,11 @@
     },
     {
       "permissionName": "cyclops.sets.add-objects",
-      "displayName": "CYCLOPS: Add objects to set (UNIMPLEMENTED)",
+      "displayName": "CYCLOPS: Add objects to set (UNIMPLEMENTED)"
     },
     {
       "permissionName": "cyclops.sets.remove-objects",
-      "displayName": "CYCLOPS: Remove objects from set (UNIMPLEMENTED)",
+      "displayName": "CYCLOPS: Remove objects from set (UNIMPLEMENTED)"
     },
     {
       "permissionName": "cyclops.sets.modify-tags",
