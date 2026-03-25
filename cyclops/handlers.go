@@ -161,17 +161,8 @@ func (server *ModCyclopsServer) handleCreateSet(w http.ResponseWriter, req *http
 
 // -----------------------------------------------------------------------------
 
-func makeSelectClause(fields, setName, cond, filter, tag, omitTag, sort, limit, offset string) (string, error) {
+func makeConditionalClause(cond, filter, tag, omitTag, sort, limit, offset string) (string, error) {
 	var b strings.Builder
-
-	if fields == "" {
-		return "", errors.New("no 'fields' parameter supplied")
-	}
-	b.WriteString("select ")
-	b.WriteString(fields)
-
-	b.WriteString(" from ")
-	b.WriteString(setName)
 
 	if cond != "" {
 		b.WriteString(" where ")
@@ -200,17 +191,41 @@ func makeSelectClause(fields, setName, cond, filter, tag, omitTag, sort, limit, 
 		b.WriteString(sort)
 	}
 
-	if limit == "" {
-		limit = "100"
+	if limit != "*" {
+		if limit == "" {
+			limit = "100"
+		}
+		b.WriteString(" limit ")
+		b.WriteString(limit)
 	}
-	b.WriteString(" limit ")
-	b.WriteString(limit)
 
 	if offset != "" {
 		b.WriteString(" offset ")
 		b.WriteString(offset)
 	}
 
+	return b.String(), nil
+}
+
+func makeSelectClause(fields, setName, cond, filter, tag, omitTag, sort, limit, offset string) (string, error) {
+	if fields == "" {
+		return "", errors.New("no 'fields' parameter supplied")
+	}
+
+	conditionalClause, err := makeConditionalClause(cond, filter, tag, omitTag, sort, limit, offset)
+	if err != nil {
+		return "", err
+	}
+
+	var b strings.Builder
+
+	b.WriteString("select ")
+	b.WriteString(fields)
+
+	b.WriteString(" from ")
+	b.WriteString(setName)
+
+	b.WriteString(conditionalClause)
 	b.WriteString(";")
 	return b.String(), nil
 }
@@ -352,7 +367,44 @@ func (server *ModCyclopsServer) handleAddObjects(w http.ResponseWriter, req *htt
 
 // -----------------------------------------------------------------------------
 
+type RemoveRecords struct {
+	Cond    string `json:"cond"`
+	Filter  string `json:"filter"`
+	Tag     string `json:"tag"`
+	OmitTag string `json:"omittag"`
+	Limit   string `json:"limit"`
+}
+
 func (server *ModCyclopsServer) handleRemoveObjects(w http.ResponseWriter, req *http.Request, caption string) error {
+	setName := chi.URLParam(req, "setName")
+
+	var params RemoveRecords
+	err := unmarshalBody(req, &params)
+	if err != nil {
+		return fmt.Errorf("%s: %w", caption, err)
+	}
+
+	clause, err := makeConditionalClause(
+		params.Cond,
+		params.Filter,
+		params.Tag,
+		params.OmitTag,
+		"", // Sort
+		"*", // Special-case value to omit "limit" completely
+		"", // Offset
+	)
+	if err != nil {
+		return fmt.Errorf("could not make conditional clause: %w", err)
+	}
+	command := "delete from " + setName + " " + clause + ";"
+	server.Log("command", command)
+
+	resp, err := server.sendToCCMS(caption+" "+setName, command)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("%s response: %+v\n", caption, resp)
+
 	w.WriteHeader(http.StatusNoContent)
 	return nil
 }
