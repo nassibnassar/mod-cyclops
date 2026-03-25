@@ -161,34 +161,28 @@ func (server *ModCyclopsServer) handleCreateSet(w http.ResponseWriter, req *http
 
 // -----------------------------------------------------------------------------
 
-func makeRetrieveCommand(req *http.Request) (string, error) {
+func makeSelectClause(fields, setName, cond, filter, tag, omitTag, sort, limit, offset string) (string, error) {
 	var b strings.Builder
 
-	fields := req.URL.Query().Get("fields")
 	if fields == "" {
 		return "", errors.New("no 'fields' parameter supplied")
 	}
 	b.WriteString("select ")
 	b.WriteString(fields)
 
-	setName := chi.URLParam(req, "setName")
 	b.WriteString(" from ")
 	b.WriteString(setName)
 
-	cond := req.URL.Query().Get("cond")
 	if cond != "" {
 		b.WriteString(" where ")
 		b.WriteString(cond)
 	}
 
-	filter := req.URL.Query().Get("filter")
 	if filter != "" {
 		b.WriteString(" filter ")
 		b.WriteString(filter)
 	}
 
-	tag := req.URL.Query().Get("tag")
-	omitTag := req.URL.Query().Get("omitTag")
 	if tag != "" && omitTag != "" {
 		return "", errors.New("both 'tag' and 'omitTag' parameters supplied")
 	}
@@ -201,20 +195,17 @@ func makeRetrieveCommand(req *http.Request) (string, error) {
 		b.WriteString(omitTag)
 	}
 
-	sort := req.URL.Query().Get("sort")
 	if sort != "" {
 		b.WriteString(" order by ")
 		b.WriteString(sort)
 	}
 
-	limit := req.URL.Query().Get("limit")
 	if limit == "" {
 		limit = "100"
 	}
 	b.WriteString(" limit ")
 	b.WriteString(limit)
 
-	offset := req.URL.Query().Get("offset")
 	if offset != "" {
 		b.WriteString(" offset ")
 		b.WriteString(offset)
@@ -222,6 +213,20 @@ func makeRetrieveCommand(req *http.Request) (string, error) {
 
 	b.WriteString(";")
 	return b.String(), nil
+}
+
+func makeRetrieveCommand(req *http.Request) (string, error) {
+	return makeSelectClause(
+		req.URL.Query().Get("fields"),
+		chi.URLParam(req, "setName"),
+		req.URL.Query().Get("cond"),
+		req.URL.Query().Get("filter"),
+		req.URL.Query().Get("tag"),
+		req.URL.Query().Get("omitTag"),
+		req.URL.Query().Get("sort"),
+		req.URL.Query().Get("limit"),
+		req.URL.Query().Get("offset"),
+	)
 }
 
 // Specify the JSON encoding.
