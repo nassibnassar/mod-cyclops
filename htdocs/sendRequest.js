@@ -1,4 +1,4 @@
-function postOrDelete(method, path, data) {
+function sendRequest(method, path, data) {
   const params = { method };
   if (method === 'POST') {
     params.headers = {
@@ -22,11 +22,11 @@ function postOrDelete(method, path, data) {
 }
 
 function postData(path, data) {
-  postOrDelete('POST', path, data);
+  sendRequest('POST', path, data);
 }
 
 function deleteObject(path) {
-  postOrDelete('DELETE', path);
+  sendRequest('DELETE', path);
 }
 
 function addRecord() {
