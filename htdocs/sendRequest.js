@@ -25,6 +25,10 @@ function postData(path, data) {
   sendRequest('POST', path, data);
 }
 
+function getObject(path) {
+  sendRequest('GET', path);
+}
+
 function deleteObject(path) {
   sendRequest('DELETE', path);
 }
