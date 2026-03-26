@@ -2,6 +2,9 @@
   <head>
     <title>Interactive form for mod-cyclops</title>
     <script src="sendRequest.js" defer></script>
+    <style>
+      hr { color: #eee; margin-top: 2em; }
+    </style>
   </head>
   <body>
     <h1>Interactive form for mod-cyclops</h1>
@@ -11,6 +14,7 @@
       <button type="button" onclick="getObject('/cyclops/sets')">List sets</a></button>
       Or <a href="/cyclops/sets">link</a>
     </p>
+    <hr />
     <p>
       <form id="create-set-form">
 	<label for="nameToAdd">Set name:</label>
@@ -37,6 +41,7 @@
 	});
       </script>
     </p>
+    <hr />
     <p>
       <form id="search-set-form">
 	<label for="nameToSearch">Set name:</label>
