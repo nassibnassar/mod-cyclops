@@ -48,6 +48,10 @@
 	<input type="text" id="search-name" value="test.mike" />
 	<label for="search-fields">Fields:</label>
 	<input type="text" id="search-fields" value="*" />
+	<label for="search-fields">Cond:</label>
+	<input type="text" id="search-cond" value="title='Hallelujah Junction'" />
+	<label for="search-fields">Sort:</label>
+	<input type="text" id="search-sort" value="title" />
 	<button type="submit">Search</button>
       </form>
       <script>
@@ -55,7 +59,9 @@
 	  e.preventDefault();
 	  const searchName = document.getElementById('search-name').value
 	  const searchFields = document.getElementById('search-fields').value
-	  const url = '/cyclops/sets/' + searchName + '?fields=' + searchFields;
+	  const searchCond = document.getElementById('search-cond').value
+	  const searchSort = document.getElementById('search-sort').value
+	  const url = '/cyclops/sets/' + searchName + '?fields=' + searchFields + '&cond=' + searchCond + '&sort=' + searchSort;
 	  window.location.href = url;
 	});
       </script>
