@@ -13,7 +13,7 @@ function postOrDelete(method, path, data) {
       alert(`Request failed with status ${response.status}: ${errorText}`);
     } else {
       const result = await response.json().catch(() => null);
-      alert('Success:', result);
+      alert('Success: ' + JSON.stringify(result, null, 2));
     }
   })
   .catch((error) => {
