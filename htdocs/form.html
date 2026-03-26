@@ -41,5 +41,21 @@
 	});
       </script>
     </p>
+    <p>
+      <form id="search-set-form">
+	<label for="nameToSearch">Search set name:</label>
+	<input type="text" id="nameToSearch" value="test.mike" />
+	<button type="submit">Search</button>
+      </form>
+      <script>
+	console.log('adding search-form listener');
+	document.getElementById('search-set-form').addEventListener('submit', function (e) {
+	  console.log('searching')
+	  e.preventDefault();
+	  const url = '/cyclops/sets/' + document.getElementById('nameToSearch').value + '?fields=*';
+	  window.location.href = url;
+	});
+      </script>
+    </p>
   </body>
 </html>
