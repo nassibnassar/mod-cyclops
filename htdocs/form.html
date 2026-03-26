@@ -18,9 +18,7 @@
 	<button type="submit">Submit</button>
       </form>
       <script>
-	console.log('adding add-form listener');
 	document.getElementById('create-set-form').addEventListener('submit', function (e) {
-	  console.log('creating')
 	  e.preventDefault();
 	  postData('/cyclops/sets', { name: document.getElementById('nameToAdd').value });
 	});
@@ -33,9 +31,7 @@
 	<button type="submit">Submit</button>
       </form>
       <script>
-	console.log('adding delete-form listener');
 	document.getElementById('delete-set-form').addEventListener('submit', function (e) {
-	  console.log('deleting')
 	  e.preventDefault();
 	  deleteObject('/cyclops/sets/' + document.getElementById('nameToDelete').value);
 	});
@@ -48,9 +44,7 @@
 	<button type="submit">Search</button>
       </form>
       <script>
-	console.log('adding search-form listener');
 	document.getElementById('search-set-form').addEventListener('submit', function (e) {
-	  console.log('searching')
 	  e.preventDefault();
 	  const url = '/cyclops/sets/' + document.getElementById('nameToSearch').value + '?fields=*';
 	  window.location.href = url;
