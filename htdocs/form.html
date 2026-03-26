@@ -52,6 +52,10 @@
 	<input type="text" id="search-cond" value="author='Adams, John'" />
 	<label for="search-fields">Sort:</label>
 	<input type="text" id="search-sort" value="title" />
+	<label for="search-fields">Limit:</label>
+	<input type="text" id="search-limit" value="100" />
+	<label for="search-fields">Offset:</label>
+	<input type="text" id="search-offset" value="" />
 	<button type="submit">Search</button>
       </form>
       <script>
@@ -61,10 +65,14 @@
 	  const searchFields = document.getElementById('search-fields').value
 	  const searchCond = document.getElementById('search-cond').value
 	  const searchSort = document.getElementById('search-sort').value
+	  const searchLimit = document.getElementById('search-limit').value
+	  const searchOffset = document.getElementById('search-offset').value
 	  const url = ('/cyclops/sets/' + searchName +
 		       '?fields=' + searchFields +
 		       '&cond=' + searchCond +
-		       '&sort=' + searchSort)
+		       '&sort=' + searchSort +
+		       '&limit=' + searchLimit +
+		       '&offset=' + searchOffset)
 	  window.location.href = url;
 	});
       </script>
