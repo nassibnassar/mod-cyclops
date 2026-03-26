@@ -7,7 +7,10 @@
     <h1>Interactive form for mod-cyclops</h1>
 
     <h2>Sets</h2>
-    <p><a href="/cyclops/sets">List sets</a></p>
+    <p>
+      <button type="button" onclick="postOrDelete('GET', '/cyclops/sets')">List sets</a></button>
+      Or <a href="/cyclops/sets">link</a>
+    </p>
     <p>
       <form id="create-set-form">
 	<label for="nameToAdd">Create set name:</label>
