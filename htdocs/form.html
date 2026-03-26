@@ -46,12 +46,16 @@
       <form id="search-set-form">
 	<label for="search-name">Set name:</label>
 	<input type="text" id="search-name" value="test.mike" />
+	<label for="search-fields">Fields:</label>
+	<input type="text" id="search-fields" value="*" />
 	<button type="submit">Search</button>
       </form>
       <script>
 	document.getElementById('search-set-form').addEventListener('submit', function (e) {
 	  e.preventDefault();
-	  const url = '/cyclops/sets/' + document.getElementById('search-name').value + '?fields=*';
+	  const searchName = document.getElementById('search-name').value
+	  const searchFields = document.getElementById('search-fields').value
+	  const url = '/cyclops/sets/' + searchName + '?fields=' + searchFields;
 	  window.location.href = url;
 	});
       </script>
