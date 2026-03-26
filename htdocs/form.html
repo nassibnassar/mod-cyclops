@@ -17,41 +17,41 @@
     <hr />
     <p>
       <form id="create-set-form">
-	<label for="nameToAdd">Set name:</label>
-	<input type="text" id="nameToAdd" value="test.mike" />
+	<label for="add-name">Set name:</label>
+	<input type="text" id="add-name" value="test.mike" />
 	<button type="submit">Create</button>
       </form>
       <script>
 	document.getElementById('create-set-form').addEventListener('submit', function (e) {
 	  e.preventDefault();
-	  postData('/cyclops/sets', { name: document.getElementById('nameToAdd').value });
+	  postData('/cyclops/sets', { name: document.getElementById('add-name').value });
 	});
       </script>
     </p>
     <p>
       <form id="delete-set-form">
-	<label for="nameToDelete">Set name:</label>
-	<input type="text" id="nameToDelete" value="test.mike" />
+	<label for="delete-name">Set name:</label>
+	<input type="text" id="delete-name" value="test.mike" />
 	<button type="submit">Delete</button>
       </form>
       <script>
 	document.getElementById('delete-set-form').addEventListener('submit', function (e) {
 	  e.preventDefault();
-	  deleteObject('/cyclops/sets/' + document.getElementById('nameToDelete').value);
+	  deleteObject('/cyclops/sets/' + document.getElementById('delete-name').value);
 	});
       </script>
     </p>
     <hr />
     <p>
       <form id="search-set-form">
-	<label for="nameToSearch">Set name:</label>
-	<input type="text" id="nameToSearch" value="test.mike" />
+	<label for="search-name">Set name:</label>
+	<input type="text" id="search-name" value="test.mike" />
 	<button type="submit">Search</button>
       </form>
       <script>
 	document.getElementById('search-set-form').addEventListener('submit', function (e) {
 	  e.preventDefault();
-	  const url = '/cyclops/sets/' + document.getElementById('nameToSearch').value + '?fields=*';
+	  const url = '/cyclops/sets/' + document.getElementById('search-name').value + '?fields=*';
 	  window.location.href = url;
 	});
       </script>
