@@ -28,15 +28,3 @@ function postData(path, data) {
 function deleteObject(path) {
   sendRequest('DELETE', path);
 }
-
-function addRecord() {
-  postData(
-    '/cyclops/sets/test.mike/add',
-    {
-      from: 'reserve',
-      cond: "author = 'Adams, John'",
-      // filter: 'jurassic', // Not yet supported
-      // tag: 'dino,ptero', // Not yet supported
-    }
-  )
-}
