@@ -37,7 +37,7 @@ examplelint:
 	z-schema removeobjects-schema.json examples/removeobject-example.json
 	z-schema addremovetag-schema.json examples/addtag-example.json
 	z-schema addremovetag-schema.json examples/removetag-example.json
-	z-schema project-schema.json examples/fetch-project.json
+	z-schema project-schema.json examples/project-example.json
 	z-schema projects-schema.json examples/show-projects-example.json
 
 apilint: cyclops.raml
