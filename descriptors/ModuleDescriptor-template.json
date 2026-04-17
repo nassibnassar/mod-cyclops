@@ -86,7 +86,7 @@
           "permissionsRequired": [
             "cyclops.sets.add-objects"
           ]
-	},
+        },
         {
           "methods": [
             "POST"
@@ -95,7 +95,7 @@
           "permissionsRequired": [
             "cyclops.sets.remove-objects"
           ]
-	},
+        },
         {
           "methods": [
             "POST"
@@ -107,7 +107,7 @@
           "permissionsDesired": [
             "cyclops.sets.add-tags",
             "cyclops.sets.remove-tags"
-	  ]
+          ]
         },
         {
           "methods": [
