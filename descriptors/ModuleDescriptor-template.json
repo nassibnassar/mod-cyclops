@@ -108,6 +108,51 @@
             "cyclops.sets.add-tags",
             "cyclops.sets.remove-tags"
 	  ]
+        },
+        {
+          "methods": [
+            "GET"
+          ],
+          "pathPattern": "/cyclops/projects",
+          "permissionsRequired": [
+            "cyclops.projects.collection.get"
+          ]
+        },
+        {
+          "methods": [
+            "POST"
+          ],
+          "pathPattern": "/cyclops/projects",
+          "permissionsRequired": [
+            "cyclops.projects.post"
+          ]
+        },
+        {
+          "methods": [
+            "GET"
+          ],
+          "pathPattern": "/cyclops/projects/{id}",
+          "permissionsRequired": [
+            "cyclops.projects.get"
+          ]
+        },
+        {
+          "methods": [
+            "DELETE"
+          ],
+          "pathPattern": "/cyclops/projects/{id}",
+          "permissionsRequired": [
+            "cyclops.projects.delete"
+          ]
+        },
+        {
+          "methods": [
+            "PUT"
+          ],
+          "pathPattern": "/cyclops/projects/{id}",
+          "permissionsRequired": [
+            "cyclops.projects.put"
+          ]
         }
       ]
     }
@@ -167,6 +212,26 @@
       "permissionName": "cyclops.sets.remove-tags",
       "displayName": "CYCLOPS: Remove tags from objects in a set (UNIMPLEMENTED)",
       "subPermissions": ["cyclops.sets.modify-tags"]
+    },
+    {
+      "permissionName": "cyclops.projects.collection.get",
+      "displayName": "CYCLOPS: Read list of projects"
+    },
+    {
+      "permissionName": "cyclops.projects.post",
+      "displayName": "CYCLOPS: Create projects"
+    },
+    {
+      "permissionName": "cyclops.projects.get",
+      "displayName": "CYCLOPS: Read full projects"
+    },
+    {
+      "permissionName": "cyclops.projects.delete",
+      "displayName": "CYCLOPS: Delete projects"
+    },
+    {
+      "permissionName": "cyclops.projects.put",
+      "displayName": "CYCLOPS: Modify projects"
     }
   ],
   "launchDescriptor": {
