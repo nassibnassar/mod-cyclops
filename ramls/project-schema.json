@@ -1,0 +1,140 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "A single project in detail",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "Unique identifier"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-reeadable name"
+    },
+    "altName": {
+      "type": "string",
+      "description": "Optional alternative name, e.g. a slug"
+    },
+    "action": {
+      "type": "object",
+      "description": "At the moment, self-documentation is all we can do: see CYCLOPS-12",
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Unique identifier of the action"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable name of the action"
+        }
+      },
+      "additionalProperties": false
+    },
+    "mouLink": {
+      "type": "string",
+      "format": "uri",
+      "description": "An optional link to a memorandom of understanding"
+    },
+    "funds": {
+      "type": "array",
+      "description": "A list of the project's funds which can be used to action spectres",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier of the fund"
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable name of the fund"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "people": {
+      "type": "array",
+      "description": "The people associated with the project and their roles",
+      "items": {
+        "type": "object",
+        "description": "A single person associated with the project",
+        "required": [
+          "xid",
+          "role"
+        ],
+        "properties": {
+          "xid": {
+            "type": "string",
+            "description": "An external identified, opaque to CCMS, of a user in the system that is communicating with CCMS, with user administation being handled by that system"
+          },
+          "role": {
+            "type": "string",
+            "description": "One of a small set of roles that a person have in a project (e.g. 'admin', 'editor', 'viewer')"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "locations": {
+      "type": "array",
+      "description": "The locations that can act as sources and destinations for the action associated with this project",
+      "items": {
+        "type": "object",
+        "description": "A single location used by the project",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier of the location"
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable name of the location"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "tracks": {
+      "type": "array",
+      "description": "The tracks within the project that a given spectre can be associated with",
+      "items": {
+        "type": "object",
+        "description": "A singe track within the project",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier of the track"
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable name of the track"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "name",
+    "action"
+  ]
+}

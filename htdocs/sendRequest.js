@@ -25,6 +25,10 @@ function postData(path, data) {
   sendRequest('POST', path, data);
 }
 
+function putData(path, data) {
+  sendRequest('PUT', path, data);
+}
+
 function getObject(path) {
   sendRequest('GET', path);
 }

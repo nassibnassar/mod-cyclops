@@ -87,6 +87,21 @@ func MakeModCyclopsServer(logger *catlogger.Logger, ccmsClient *ccms.Client, roo
 	r.Post("/cyclops/sets/{setName}/tag/{tagName}", func(w http.ResponseWriter, req *http.Request) {
 		server.runWithErrorHandling(w, req, server.handleAddRemoveTags, "add/remove tags")
 	})
+	r.Get("/cyclops/projects", func(w http.ResponseWriter, req *http.Request) {
+		server.runWithErrorHandling(w, req, server.handleShowProjects, "show projects")
+	})
+	r.Get("/cyclops/projects/{projectId}", func(w http.ResponseWriter, req *http.Request) {
+		server.runWithErrorHandling(w, req, server.handleFetchProject, "fetch project")
+	})
+	r.Post("/cyclops/projects", func(w http.ResponseWriter, req *http.Request) {
+		server.runWithErrorHandling(w, req, server.handleCreateProject, "create project")
+	})
+	r.Delete("/cyclops/projects/{projectId}", func(w http.ResponseWriter, req *http.Request) {
+		server.runWithErrorHandling(w, req, server.handleDeleteProject, "delete project")
+	})
+	r.Put("/cyclops/projects/{projectId}", func(w http.ResponseWriter, req *http.Request) {
+		server.runWithErrorHandling(w, req, server.handleUpdateProject, "update project")
+	})
 	r.NotFound(func(w http.ResponseWriter, req *http.Request) {
 		status := http.StatusNotFound
 		message := http.StatusText(status)
