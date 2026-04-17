@@ -422,6 +422,33 @@ func (server *ModCyclopsServer) handleAddRemoveTags(w http.ResponseWriter, req *
 
 // -----------------------------------------------------------------------------
 
+func (server *ModCyclopsServer) handleShowProjects(w http.ResponseWriter, req *http.Request, caption string) error {
+	w.WriteHeader(http.StatusNotImplemented)
+	return nil
+}
+
+func (server *ModCyclopsServer) handleFetchProject(w http.ResponseWriter, req *http.Request, caption string) error {
+	w.WriteHeader(http.StatusNotImplemented)
+	return nil
+}
+
+func (server *ModCyclopsServer) handleCreateProject(w http.ResponseWriter, req *http.Request, caption string) error {
+	w.WriteHeader(http.StatusNotImplemented)
+	return nil
+}
+
+func (server *ModCyclopsServer) handleDeleteProject(w http.ResponseWriter, req *http.Request, caption string) error {
+	w.WriteHeader(http.StatusNotImplemented)
+	return nil
+}
+
+func (server *ModCyclopsServer) handleUpdateProject(w http.ResponseWriter, req *http.Request, caption string) error {
+	w.WriteHeader(http.StatusNotImplemented)
+	return nil
+}
+
+// -----------------------------------------------------------------------------
+
 func unmarshalBody[T any](req *http.Request, data *T) error {
 	b, err := io.ReadAll(req.Body)
 	if err != nil {
