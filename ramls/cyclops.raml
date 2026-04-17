@@ -161,3 +161,45 @@ documentation:
             responses:
               204:
                 description: No content is returned.
+  /projects:
+    description: "The projects in the system, in which collaborative collection management takes place"
+    get:
+      description: "Return a brief list of all known projects"
+      responses:
+        200:
+          body:
+            application/json:
+              type: !include projects-schema.json
+              example: !include examples/show-projects-example.json
+    post:
+      description: "Create a new project"
+      body:
+        application/json:
+          type: !include project-schema.json
+          example: !include examples/project-example.json
+      responses:
+        204:
+          description: No content is returned.
+    /{id}:
+      get:
+        description: "Fetch a full project"
+        responses:
+          200:
+            body:
+              application/json:
+                type: !include project-schema.json
+                example: !include examples/project-example.json
+      delete:
+        description: "Delete a project"
+        responses:
+          204:
+            description: No content is returned.
+      put:
+        description: "Modify a project"
+        body:
+          application/json:
+            type: !include project-schema.json
+            example: !include examples/project-example.json
+        responses:
+          204:
+            description: No content is returned.
