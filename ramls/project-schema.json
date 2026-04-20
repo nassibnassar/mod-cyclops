@@ -5,7 +5,7 @@
   "properties": {
     "id": {
       "type": "integer",
-      "description": "Unique identifier"
+      "description": "Unique identifier (but not used as the identifier: see 'altName' below)"
     },
     "name": {
       "type": "string",
@@ -13,7 +13,7 @@
     },
     "altName": {
       "type": "string",
-      "description": "Optional alternative name, e.g. a slug"
+      "description": "Alternative name, e.g. a slug. At present, this (not 'id') functions as the identifier of the project, to be used as the {id} part in the paths of WSAPI endpoints that operate on individual projects."
     },
     "action": {
       "type": "object",
@@ -133,8 +133,6 @@
   },
   "additionalProperties": false,
   "required": [
-    "id",
-    "name",
-    "action"
+    "altName"
   ]
 }

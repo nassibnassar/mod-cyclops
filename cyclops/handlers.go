@@ -422,10 +422,40 @@ func (server *ModCyclopsServer) handleAddRemoveTags(w http.ResponseWriter, req *
 
 // -----------------------------------------------------------------------------
 
-func (server *ModCyclopsServer) handleShowProjects(w http.ResponseWriter, req *http.Request, caption string) error {
-	w.WriteHeader(http.StatusNotImplemented)
-	return nil
+type BriefProject struct {
+	AltName string `json:"altName"`
+	// More to come, surely
 }
+
+type ProjectList struct {
+	Projects []BriefProject `json:"projects"`
+	// No other elements yet, but use a structure for future expansion
+}
+
+func (server *ModCyclopsServer) handleShowProjects(w http.ResponseWriter, req *http.Request, caption string) error {
+	resp, err := server.sendToCCMS(caption, "show projects;")
+	if err != nil {
+		return err
+	}
+
+	result := readResults(resp)[0]
+	fmt.Printf("result: %+v\n", result)
+	projects := make([]BriefProject, 0)
+	for val := range result.Data() {
+		altName, _ := val.Values()[0].(string)
+		fmt.Printf("val %+v -> altName %s\n", val, altName)
+		bf := BriefProject{
+			AltName: altName,
+		}
+		projects = append(projects, bf)
+	}
+	fmt.Printf("projects: %+v\n", projects)
+	projectList := ProjectList{Projects: projects}
+	fmt.Printf("projectList: %+v\n", projectList)
+	return respondWithJSON(w, projectList, caption)
+}
+
+// -----------------------------------------------------------------------------
 
 func (server *ModCyclopsServer) handleFetchProject(w http.ResponseWriter, req *http.Request, caption string) error {
 	w.WriteHeader(http.StatusNotImplemented)

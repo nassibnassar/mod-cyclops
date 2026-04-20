@@ -1,9 +1,15 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "description": "A list of zero or more projects",
-  "type": "array",
-  "items": {
-    "type": "object",
-    "$ref": "project-schema.json"
+  "type": "object",
+  "properties": {
+    "projects": {
+      "description": "A list of the projects",
+      "type": "array",
+      "items": {
+	"type": "object",
+	"$ref": "project-schema.json"
+      }
+    }
   }
 }

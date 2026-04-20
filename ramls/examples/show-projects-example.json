@@ -1,29 +1,31 @@
-[
-  {
-    "id": 321,
-    "name": "Slavic studies",
-    "altName": "palci_slavic",
-    "action": {
-      "id": 123,
-      "name": "Purchase"
+{
+  "projects": [
+    {
+      "id": 321,
+      "name": "Slavic studies",
+      "altName": "palci_slavic",
+      "action": {
+	"id": 123,
+	"name": "Purchase"
+      }
+    },
+    {
+      "id": 456,
+      "name": "Literature of North Korea",
+      "altName": "lit_nk",
+      "action": {
+	"id": 654,
+	"name": "Weed"
+      }
+    },
+    {
+      "id": 789,
+      "name": "Ukrainian Culture",
+      "altName": "ukr1",
+      "action": {
+	"id": 987,
+	"name": "Digitize"
+      }
     }
-  },
-  {
-    "id": 456,
-    "name": "Literature of North Korea",
-    "altName": "lit_nk",
-    "action": {
-      "id": 654,
-      "name": "Weed"
-    }
-  },
-  {
-    "id": 789,
-    "name": "Ukrainian Culture",
-    "altName": "ukr1",
-    "action": {
-      "id": 987,
-      "name": "Digitize"
-    }
-  }
-]
+  ]
+}
