@@ -485,7 +485,6 @@ func (server *ModCyclopsServer) handleFetchProject(w http.ResponseWriter, req *h
 		pair := val.Values()
 		key := mustString(pair[0])
 		value := pair[1]
-		fmt.Printf("result %d:n %s=%+v\n", i, key, value)
 
 		switch key {
 		case "title":
@@ -505,7 +504,6 @@ func (server *ModCyclopsServer) handleFetchProject(w http.ResponseWriter, req *h
 		}
 	}
 
-	fmt.Printf("\tproject = %+v\n", project)
 	return respondWithJSON(w, project, caption)
 }
 
