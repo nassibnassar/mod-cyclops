@@ -457,10 +457,62 @@ func (server *ModCyclopsServer) handleShowProjects(w http.ResponseWriter, req *h
 
 // -----------------------------------------------------------------------------
 
-func (server *ModCyclopsServer) handleFetchProject(w http.ResponseWriter, req *http.Request, caption string) error {
-	w.WriteHeader(http.StatusNotImplemented)
-	return nil
+type ProjectAction struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
 }
+
+type Project struct {
+	AltName string        `json:"altName"`
+	Title   string        `json:"title"`
+	Action  ProjectAction `json:"action"`
+	MouLink string        `json:"mou_link"`
+	Funds   string        `json:"funds"`
+}
+
+func (server *ModCyclopsServer) handleFetchProject(w http.ResponseWriter, req *http.Request, caption string) error {
+	projectId := chi.URLParam(req, "projectId")
+	resp, err := server.sendToCCMS(caption, "show project "+projectId+";")
+	if err != nil {
+		return err
+	}
+
+	result := readResults(resp)[0]
+	project := Project{
+		AltName: projectId,
+	}
+
+	i := 0
+	for val := range result.Data() {
+		i += 1
+		pair := val.Values()
+		key := mustString(pair[0])
+		value := pair[1]
+		fmt.Printf("result %d:n %s=%+v\n", i, key, value)
+
+		switch key {
+		case "title":
+			project.Title = mustString(value)
+		case "action":
+			project.Action = ProjectAction{
+				Name: mustString(value),
+			}
+		case "mou_link":
+			project.MouLink = mustString(value)
+		case "funds":
+			// XXX This should not be a string, but an array of structures
+			// If necessary I can parse the string, but it would be nice not to
+			project.Funds = mustString(value)
+		default:
+			server.Log("data", "unrecognised Project field", key)
+		}
+	}
+
+	fmt.Printf("\tproject = %+v\n", project)
+	return respondWithJSON(w, project, caption)
+}
+
+// -----------------------------------------------------------------------------
 
 func (server *ModCyclopsServer) handleCreateProject(w http.ResponseWriter, req *http.Request, caption string) error {
 	w.WriteHeader(http.StatusNotImplemented)
@@ -524,4 +576,12 @@ func readResults(resp *ccms.Response) []ccms.Result {
 		results = append(results, r)
 	}
 	return results
+}
+
+func mustString(v any) string {
+	s, ok := v.(string)
+	if !ok {
+		panic("mustString: value is not a string")
+	}
+	return s
 }
