@@ -439,19 +439,16 @@ func (server *ModCyclopsServer) handleShowProjects(w http.ResponseWriter, req *h
 	}
 
 	result := readResults(resp)[0]
-	fmt.Printf("result: %+v\n", result)
 	projects := make([]BriefProject, 0)
 	for val := range result.Data() {
-		altName, _ := val.Values()[0].(string)
-		fmt.Printf("val %+v -> altName %s\n", val, altName)
+		altName := mustString(val.Values()[0])
 		bf := BriefProject{
 			AltName: altName,
 		}
 		projects = append(projects, bf)
 	}
-	fmt.Printf("projects: %+v\n", projects)
+
 	projectList := ProjectList{Projects: projects}
-	fmt.Printf("projectList: %+v\n", projectList)
 	return respondWithJSON(w, projectList, caption)
 }
 
