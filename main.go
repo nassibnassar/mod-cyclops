@@ -10,25 +10,28 @@ import "github.com/indexdata/mod-cyclops/cyclops"
 
 // PRIVATE to this file
 type config struct {
-	loggingPrefix    string
-	loggingTimestamp bool
+	logger           *catlogger.Logger
 	queryTimeout     int
 	serverHost       string
 	serverPort       int
 	ccmsClient       *ccms.Client
 }
 
-func makeCCMSClient() *ccms.Client {
+func makeCCMSClient(logger *catlogger.Logger) *ccms.Client {
+	host := os.Getenv("CCMS_HOST")
 	port := os.Getenv("CCMS_PORT")
 	if port == "" {
 		port = "8504"
 	}
+	user := os.Getenv("CCMS_USER")
+	password := os.Getenv("CCMS_PASSWORD")
 
+	logger.Log("client", fmt.Sprintf("host='%s' port='%s' user='%s' password='%s'", host, port, user, password))
 	client := ccms.Client{
-		Host:          os.Getenv("CCMS_HOST"),
+		Host:          host,
 		Port:          port,
-		User:          os.Getenv("CCMS_USER"),
-		Password:      os.Getenv("CCMS_PASSWORD"),
+		User:          user,
+		Password:      password,
 		NoTLS:         true, // insecure, but server does not yet support TLS
 		TLSSkipVerify: true, // likewise
 	}
@@ -39,13 +42,19 @@ func makeCCMSClient() *ccms.Client {
 func buildConfigFromEnv() *config {
 	var cfg config
 
-	cfg.loggingPrefix = os.Getenv("LOGGING_PREFIX")
+	loggingPrefix := os.Getenv("LOGGING_PREFIX")
 
-	cfg.loggingTimestamp = false
+	var loggingTimestamp bool = false
 	tsString := os.Getenv("LOGGING_TIMESTAMP")
 	if tsString != "" {
-		cfg.loggingTimestamp = true
+		loggingTimestamp = true
 	}
+
+	// catlogger.MakeLogger handes the category environment variables on its own
+	cfg.logger = catlogger.MakeLogger("", loggingPrefix, loggingTimestamp)
+
+	// We do not need this transformation yet, but will need something like it when we have authentication
+	cfg.logger.AddTransformation(regexp.MustCompile(`\\"pass\\":\\"[^"]*\\"`), `\"pass\":\"********\"`)
 
 	timeoutString := os.Getenv("MOD_CYCLOPS_QUERY_TIMEOUT")
 	if timeoutString != "" {
@@ -66,7 +75,7 @@ func buildConfigFromEnv() *config {
 		cfg.serverPort = 12370
 	}
 
-	cfg.ccmsClient = makeCCMSClient()
+	cfg.ccmsClient = makeCCMSClient(cfg.logger)
 
 	return &cfg
 }
@@ -83,12 +92,9 @@ func main() {
 		os.Exit(2)
 	}
 
-	// catlogger.MakeLogger handes the category environment variables on its own
-	logger := catlogger.MakeLogger("", cfg.loggingPrefix, cfg.loggingTimestamp)
-	// We do not need this transformation yet, but will need something like it when we have authentication
-	logger.AddTransformation(regexp.MustCompile(`\\"pass\\":\\"[^"]*\\"`), `\"pass\":\"********\"`)
+	cfg.logger.Log("config", fmt.Sprintf("%+v", cfg));
 
-	server := cyclops.MakeModCyclopsServer(logger, cfg.ccmsClient, ".", cfg.queryTimeout)
+	server := cyclops.MakeModCyclopsServer(cfg.logger, cfg.ccmsClient, ".", cfg.queryTimeout)
 	err := server.Launch(cfg.serverHost, cfg.serverPort)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s: cannot launch server: %s\n", os.Args[0], err)
