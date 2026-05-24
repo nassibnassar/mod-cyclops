@@ -623,16 +623,16 @@ func (server *ModCyclopsServer) handleDeleteProject(w http.ResponseWriter, req *
 func project2command(projectId string, project Project) string {
 	var b strings.Builder
 	b.WriteString("alter project " + projectId + " alter property title set '" + project.Title + "';\n")
-	b.WriteString("alter project " + projectId + " alter property action set '" + project.Action.Name + "';\n")
+	b.WriteString("alter project " + projectId + " alter property action set " + project.Action.Name + ";\n")
 	b.WriteString("alter project " + projectId + " alter property mou_link set '" + project.MouLink + "';\n")
 	b.WriteString("alter project " + projectId + " alter property funds drop all;\n")
 	for _, fund := range project.Funds {
-		b.WriteString("alter project " + projectId + " alter property funds add '" + fund.Id + "';\n")
+		b.WriteString("alter project " + projectId + " alter property funds add " + fund.Id + ";\n")
 	}
 	// No point supporting the next three until we know what CCMS is going to do with them
-	// b.WriteString("alter project " + projectId + " alter property people set '" + project.People + "';\n")
-	// b.WriteString("alter project " + projectId + " alter property locations set '" + project.Locations + "';\n")
-	// b.WriteString("alter project " + projectId + " alter property tracks set '" + project.Tracks + "'\n")
+	// b.WriteString("alter project " + projectId + " alter property people set " + project.People + ";\n")
+	// b.WriteString("alter project " + projectId + " alter property locations set " + project.Locations + ";\n")
+	// b.WriteString("alter project " + projectId + " alter property tracks set " + project.Tracks + "\n")
 	return b.String()
 }
 
